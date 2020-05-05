@@ -1,4 +1,4 @@
-# Use a congif file for Xamarin Forms
+# Use a config file for Xamarin Forms
 
 Helper que ayuda a usar un archivo de configuración para tus app Xamarin Forms. Soporta diferentes archivos para Debug y Release.
 
