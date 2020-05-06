@@ -15,7 +15,7 @@ namespace ConfigXF
         {
             if (assembly == null)
             {
-                throw new ArgumentNullException(nameof(Assembly), "Cannot be null");
+                throw new ArgumentNullException(nameof(Assembly), "Assembly Cannot be null");
             }
 
             InitializeConfigManager(new ConfigManagerSettings(assembly));
@@ -23,9 +23,9 @@ namespace ConfigXF
 
         public static void Init(ConfigManagerSettings configManagerSettings)
         {
-            if (configManagerSettings.Assembly == null)
+            if (configManagerSettings?.Assembly == null)
             {
-                throw new ArgumentNullException(nameof(Assembly), "Cannot be null");
+                throw new ArgumentNullException(nameof(Assembly), "Assembly Cannot be null");
             }
 
             InitializeConfigManager(configManagerSettings);

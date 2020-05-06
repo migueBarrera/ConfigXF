@@ -6,7 +6,7 @@ namespace ConfigXF
 {
     internal static class EmbeddedResourceHelper
     {
-        public static string Load(string resourceName, Assembly assembly = null)
+        public static string Load(string resourceName, Assembly assembly)
         {
             if (TryGetResource(resourceName, out var fullResourceName, assembly))
             {
@@ -23,26 +23,20 @@ namespace ConfigXF
             }
         }
 
-        private static bool TryGetResource(string resourceName, out string fullResourceName, Assembly assembly = null)
+        private static bool TryGetResource(string resourceName, out string fullResourceName, Assembly assembly)
         {
-            if (assembly == null)
-            {
-                assembly = Assembly.GetExecutingAssembly();
-            }
-
             try
             {
                 fullResourceName = assembly
                         .GetManifestResourceNames()
                         .First(resource => resource.EndsWith(resourceName));
+                return true;
             }
             catch (System.Exception)
             {
                 fullResourceName = string.Empty;
                 return false;
             }
-
-            return true;
         }
     }
 }
