@@ -1,50 +1,67 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Reflection;
 
 namespace ConfigXF
 {
     public static class ConfigManager<T>
     {
-        private const string ConfigFilename = "Config.json";
-
-        private const string DebugConfig = "Config_Debug.json";
-        private const string ReleaseConfig = "Config_Release.json";
-
         private static JsonSerializerSettings settings;
 
         public static T CurrentConfig;
 
-        public static void Init(Assembly assembly, Required required = Required.Default)
+        public static void Init(Assembly assembly)
         {
-            InitJsonSettings(required);
+            if (assembly == null)
+            {
+                throw new ArgumentNullException(nameof(Assembly), "Cannot be null");
+            }
 
-            SetBuildInConfig(assembly);
-
-            OverrideConfigIfConfigFileFound(assembly);
+            InitializeConfigManager(new ConfigManagerSettings(assembly));
         }
+
+        public static void Init(ConfigManagerSettings configManagerSettings)
+        {
+            if (configManagerSettings.Assembly == null)
+            {
+                throw new ArgumentNullException(nameof(Assembly), "Cannot be null");
+            }
+
+            InitializeConfigManager(configManagerSettings);
+        }
+
+        private static void InitializeConfigManager(ConfigManagerSettings configManagerSettings)
+        {
+            InitJsonSettings(configManagerSettings.Required);
+
+            SetBuildInConfig(configManagerSettings);
+
+            OverrideConfigIfConfigFileFound(configManagerSettings);
+        }
+
 
         public static string GetCurrentConfigInJson()
         {
             return JsonConvert.SerializeObject(CurrentConfig, settings);
         }
 
-        private static void OverrideConfigIfConfigFileFound(Assembly assembly)
+        private static void OverrideConfigIfConfigFileFound(ConfigManagerSettings configManagerSettings)
         {
-            var configJson = EmbeddedResourceHelper.Load(ConfigFilename, assembly);
+            var configJson = EmbeddedResourceHelper.Load(configManagerSettings.MasterFile, configManagerSettings.Assembly);
             if (!string.IsNullOrWhiteSpace(configJson))
             {
                 SetConfig(configJson);
             }
         }
 
-        private static void SetBuildInConfig(Assembly assembly)
+        private static void SetBuildInConfig(ConfigManagerSettings configManagerSettings)
         {
-            var configFile = DebugConfig;
+            var configFile = configManagerSettings.DebugFile;
 #if !DEBUG
-            configFile = ReleaseConfig;
+            configFile = configManagerSettings.ReleaseFile;
 #endif
-            var configJson = EmbeddedResourceHelper.Load(configFile, assembly);
+            var configJson = EmbeddedResourceHelper.Load(configFile, configManagerSettings.Assembly);
             if (!string.IsNullOrWhiteSpace(configJson))
             {
                 SetConfig(configJson);
