@@ -45,9 +45,3 @@ stages:
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages/releases'
         arguments: '--configuration $(buildConfiguration)'
         nobuild: true
-
-    - publish: '$(Build.ArtifactStagingDirectory)/packages'
-      artifact: 'packages'            
-  displayName: 'Publish Release NuGet Package'
-  dependsOn: 'Build'
-  condition: succeeded()
