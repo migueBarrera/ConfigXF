@@ -13,12 +13,23 @@ namespace SampleConfigXF
         {
             InitializeComponent();
 
-            Locator.Init();
-            Locator.Resolve<INavigationService>().NavigateToLogIn();
-
+            ////You can use general config
             ConfigManager<AppConfig>.Init(Assembly.GetExecutingAssembly());
 
-            var x = ConfigManager<AppConfig>.CurrentConfig.Title;
+            ////OR custom config
+
+            ////ConfigManager<AppConfig>.Init(
+            //    new ConfigManagerSettings()
+            //    {
+            //        Assembly = Assembly.GetExecutingAssembly(),
+            //        Required = Newtonsoft.Json.Required.Always,
+            //        DebugFile = "Config_Debug.json",
+            //        ReleaseFile = "MyReleaseFile.json",
+            //        MasterFile = "MyMasterFile.json",
+            //    });
+
+            Locator.Init();
+            Locator.Resolve<INavigationService>().NavigateToLogIn();
         }
 
         protected override void OnSleep()

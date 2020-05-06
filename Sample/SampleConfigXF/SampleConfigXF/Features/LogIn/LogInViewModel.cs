@@ -4,17 +4,23 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Configuration;
+using ConfigXF;
+using SampleConfigXF.Config;
 
 namespace SampleConfigXF.Features.LogIn
 {
     public class LogInViewModel : BaseViewModel
     {
-        public LogInViewModel(IConfiguration configuration)
-        {
+        private string testText;
 
+        public LogInViewModel()
+        {
+            TestText = ConfigManager<AppConfig>.CurrentConfig?.Title;
         }
 
         public ICommand ClickButtonCommand => new AsyncCommand(ClickButtonCommandExecute);
+
+        public string TestText { get => testText; set => SetAndRaisePropertyChanged(ref testText,value); }
 
         private async Task ClickButtonCommandExecute()
         {

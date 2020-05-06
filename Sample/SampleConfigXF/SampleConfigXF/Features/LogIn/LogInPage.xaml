@@ -6,16 +6,16 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:framework="clr-namespace:SampleConfigXF.Framework"
     xmlns:local="clr-namespace:SampleConfigXF.Features.LogIn"
-    x:TypeArguments="local:LogInViewModel"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:TypeArguments="local:LogInViewModel"
     mc:Ignorable="d">
     <ContentPage.Content>
         <StackLayout>
             <Label
                 HorizontalOptions="CenterAndExpand"
-                Text="Welcome to Xamarin.Forms!"
+                Text="{Binding TestText}"
                 VerticalOptions="CenterAndExpand" />
-            <Button Text="TaskHelper Test" Command="{Binding ClickButtonCommand}"/>
+            <Button Command="{Binding ClickButtonCommand}" Text="TaskHelper Test" />
         </StackLayout>
     </ContentPage.Content>
 </framework:BaseContentPage>
