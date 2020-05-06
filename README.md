@@ -10,7 +10,7 @@ ConfigXF for Xamarin.Forms
 Install on .Net Standard Library.
 
 ## NuGet
-* Available on NuGet: [BottomSheetXF](https://www.nuget.org/packages/ConfigXF/)
+* Available on NuGet: [ConfigXF](https://www.nuget.org/packages/ConfigXF/)
 
 ----------
 
