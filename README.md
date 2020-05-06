@@ -1,6 +1,7 @@
 # Use a config file for Xamarin Forms
 
 Helper que ayuda a usar un archivo de configuración para tus app Xamarin Forms. Soporta diferentes archivos para Debug y Release.
+Tambien puedes usar configuraciones diferentes por plataformas Android, IOS, UWP, etc... 
 
  ===================
 
@@ -34,7 +35,52 @@ ConfigManager<AppConfig>.CurrentConfig.YOURPROPERTY
 
 
 ## Config files
-> - El archivo de configuración debe llamarse:
+> - El archivo de configuración por defecto debe llamarse:
 > - Debug : Config_Debug.json
 > - Release : Config_Release.json
 > - Override Config : Config.json Remplaza cualquier archivo de configuración anterior
+> - Puedes llamar a Init con un objeto ConfigManagerSettings y configurar diferentes nombres para tus ficheros de configuracion
+
+
+## Different configuration files for each platform
+
+> - En lugar de tener los ficheros de configuración igual para todas las plataformas tu puedes tener diferentes para cada plataforma
+> - Solo necesitas pasarle el Assembly del proyecto de la plataforma. Crea un pequeño DependecyService .
+```
+public interface IAssemblyService
+    {
+        Assembly GetPlatformAssembly();
+    }
+```
+> - En cada plataforma implementa la interfaz
+```
+public class AssemblyService : IAssemblyService
+    {
+        public Assembly GetPlatformAssembly()
+        {
+            return Assembly.GetExecutingAssembly();
+        }
+    }
+```
+> - Usalo al iniciar ConfigXF
+```
+var platformAsembly = DependencyService.Get<IAssemblyService>().GetPlatformAssembly();
+
+ConfigManager<AppConfig>.Init(platformAsembly);
+```
+
+## Más flexibilidad
+> - Puedes configurar más parametros usando ConfigManagerSettings
+```
+var platformAsembly = DependencyService.Get<IAssemblyService>().GetPlatformAssembly();
+
+ConfigManager<AppConfig>.Init(
+                new ConfigManagerSettings()
+                {
+                    Assembly = platformAsembly,
+                    Required = Newtonsoft.Json.Required.Always,
+                    DebugFile = "Config_Debug.json",
+                    ReleaseFile = "MyReleaseFile.json",
+                    MasterFile = "MyMasterFile.json",
+                });
+```
